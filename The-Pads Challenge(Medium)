@@ -1,0 +1,28 @@
+//https://www.hackerrank.com/challenges/the-pads/problem
+
+CREATE TABLE occupations (
+Name VARCHAR(30),
+Occupation VARCHAR(30)
+);
+
+INSERT INTO occupations VALUES ("Samantha","Doctor");
+INSERT INTO occupations VALUES ("Julia","Actor");
+INSERT INTO occupations VALUES ("Maria","Actor");
+INSERT INTO occupations VALUES ("Meera","Singer");
+INSERT INTO occupations VALUES ("Ashley","Professor");
+INSERT INTO occupations VALUES ("Ketty","Professor");
+INSERT INTO occupations VALUES ("Christeen","Professor");
+INSERT INTO occupations VALUES ("Jane","Actor");
+INSERT INTO occupations VALUES ("Jenny","Doctor");
+INSERT INTO occupations VALUES ("Priya","Singer");
+
+SELECT 
+CONCAT(name,"(",substring((Occupation),1,1),")") as opt 
+FROM occupations  
+UNION 
+SELECT 
+CONCAT("There are a total of ",count," ",occupation) as opt 
+FROM
+(
+    SELECT COUNT(*) as count, LOWER(CONCAT(occupation,"s.")) as occupation from occupations GROUP BY occupation
+)   AS a order by opt;
