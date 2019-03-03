@@ -1,0 +1,74 @@
+#https://www.hackerrank.com/challenges/occupations/problem
+#Occupation will only contain one of the following values: Doctor, Professor, Singer or Actor.
+
+# Trial 1
+mysql> SELECT 
+       Doctor, 
+       Professor, 
+       Singer, 
+       Actor 
+       FROM
+    -> (
+    ->          SELECT 
+    ->          case when occupation="Doctor" then  (@r1 := @r1 + 1) 
+    ->               when occupation="Professor" then  (@r2 := @r2 + 1)  
+    ->               when occupation="Singer" then  (@r3 := @r3 + 1) 
+    ->               when occupation="Actor" then  (@r4 := @r4 + 1) end as rownumber,
+    ->          case when occupation="Doctor" then name end as Doctor, 
+    ->          case when occupation="Professor" then name  end as Professor , 
+    ->          case when occupation="Singer" then name  end as Singer , 
+    ->          case when occupation="Actor" then name  end as Actor   from occupations
+    ->          cross join (select @r1 := 0) r1
+    ->          cross join (select @r2 := 0) r2
+    ->          cross join (select @r3 := 0) r3
+    ->          cross join (select @r4 := 0) r4
+    ->          order by name
+    -> ) as temp
+    -> group by Doctor, Professor, Singer, Actor,rownumber;
++----------+-----------+--------+-------+
+| Doctor   | Professor | Singer | Actor |
++----------+-----------+--------+-------+
+| NULL     | NULL      | NULL   | Jane  |
+| NULL     | NULL      | NULL   | Julia |
+| NULL     | NULL      | NULL   | Maria |
+| NULL     | NULL      | Meera  | NULL  |
+| NULL     | NULL      | Priya  | NULL  |
+| NULL     | Ashley    | NULL   | NULL  |
+| NULL     | Christeen | NULL   | NULL  |
+| NULL     | Ketty     | NULL   | NULL  |
+| Jenny    | NULL      | NULL   | NULL  |
+| Samantha | NULL      | NULL   | NULL  |
++----------+-----------+--------+-------+
+10 rows in set (0.00 sec)
+
+# Trial 2
+mysql> SELECT
+       max(Doctor),  
+       max(Professor),  
+       max(Singer),  
+       max(Actor) 
+       from ( 
+                select  
+                case when occupation="Doctor" then  (@r1 := @r1 + 1)       
+                     when occupation="Professor" then  (@r2 := @r2 + 1)       
+                     when occupation="Singer" then  (@r3 := @r3 + 1)       
+                     when occupation="Actor" then  (@r4 := @r4 + 1) end as rownumber, 
+                case when occupation="Doctor" then name end as Doctor,  
+                case when occupation="Professor" then name  end as Professor ,  
+                case when occupation="Singer" then name  end as Singer ,  
+                case when occupation="Actor" then name  end as Actor   
+                from occupations 
+                cross join (select @r1 := 0) r1 
+                cross join (select @r2 := 0) r2 
+                cross join (select @r3 := 0) r3 
+                cross join (select @r4 := 0) r4 
+                order by name 
+            ) as temp group by rownumber;
++-------------+----------------+-------------+------------+
+| max(Doctor) | max(Professor) | max(Singer) | max(Actor) |
++-------------+----------------+-------------+------------+
+| Jenny       | Ashley         | Meera       | Jane       |
+| Samantha    | Christeen      | Priya       | Julia      |
+| NULL        | Ketty          | NULL        | Maria      |
++-------------+----------------+-------------+------------+
+3 rows in set (0.01 sec)
