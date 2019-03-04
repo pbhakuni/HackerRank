@@ -1,0 +1,11 @@
+#https://www.hackerrank.com/challenges/the-report
+
+SELECT 
+IF (grade >= 8, Name, NULL),
+grade, 
+marks 
+FROM
+(select name, (select grade from grades where marks between min_mark and max_mark) as grade,
+marks from  students
+) AS mystudents
+ORDER BY Grade DESC, Name;
