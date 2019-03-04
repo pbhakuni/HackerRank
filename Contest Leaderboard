@@ -1,0 +1,21 @@
+#https://www.hackerrank.com/challenges/contest-leaderboard
+
+SELECT 
+s.hacker_id, 
+h.name, 
+SUM(s.score) as total_score
+FROM
+(
+          SELECT 
+          hacker_id, 
+          challenge_id, 
+          max(score) as score
+          FROM 
+          submissions 
+          group by 1,2
+) as s, hackers h
+where s.hacker_id = h.hacker_id
+group by s.hacker_id, h.name
+having total_score > 0
+order by total_score desc, h.hacker_id
+;
