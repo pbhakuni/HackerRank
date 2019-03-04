@@ -1,0 +1,11 @@
+#https://www.hackerrank.com/challenges/projects
+
+SET sql_mode = '';
+
+SELECT start_date, end_date 
+FROM 
+(SELECT start_date from projects where start_date NOT IN (select end_date from projects)) a, 
+(select end_date from projects where end_date NOT IN (select start_date from projects)) b
+WHERE start_date < end_date
+GROUP BY Start_Date
+ORDER BY DATEDIFF(End_Date, Start_Date), Start_Date;
