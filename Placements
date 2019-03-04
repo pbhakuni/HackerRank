@@ -1,0 +1,14 @@
+#https://www.hackerrank.com/challenges/placements
+
+SELECT   
+chk.name
+FROM packages p INNER JOIN (SELECT s.id, s.name as name, f.friend_id as friend_id, p.salary as my_salary 
+                            FROM
+                            friends f INNER JOIN students s ON s.id = f.id
+                            INNER JOIN packages p ON f.id = p.id  
+                            ) as chk
+ON chk.friend_id = p.id 
+and chk.my_salary < p.salary
+order by p.salary;
+ 
+ 
